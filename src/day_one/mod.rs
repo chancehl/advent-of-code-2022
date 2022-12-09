@@ -1,4 +1,4 @@
-/// Counts calories and returns the number of calories the elf who ate the most consumed
+/// Counts calories and returns the number of calories eaten by the elf who consumed the most
 pub fn calorie_counting(input: &str) -> u32 {
     let elf_meals = input.split("\n\n").collect::<Vec<&str>>();
 
