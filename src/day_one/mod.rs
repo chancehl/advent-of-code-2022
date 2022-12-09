@@ -33,7 +33,7 @@ mod calorie_counting {
     use crate::day_one::calorie_counting;
 
     #[test]
-    fn calculates_positive_numbers() {
+    fn calculates_max() {
         let input = "1\n2\n3\n\n5\n5\n5";
         let result = calorie_counting(input);
         let expected = 15;
