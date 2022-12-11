@@ -234,11 +234,15 @@ mod tests {
 
     #[test]
     pub fn part_one_test() {
-        assert_eq!(part_one::rock_paper_scissors("A Y\nB Z\nC X"), 24)
+        assert_eq!(part_one::rock_paper_scissors("A X\nC Y\nC Y"), 8);
+        assert_eq!(part_one::rock_paper_scissors("B Y\nA Z\nB X"), 9);
+        assert_eq!(part_one::rock_paper_scissors("C Z\nB X\nA Z"), 10);
     }
 
     #[test]
     pub fn part_two_test() {
-        assert_eq!(part_two::rock_paper_scissors("A Y\nB Z\nC X"), 15)
+        assert_eq!(part_two::rock_paper_scissors("A X\nC Y\nC Y"), 15);
+        assert_eq!(part_two::rock_paper_scissors("B Y\nA Z\nB X"), 14);
+        assert_eq!(part_two::rock_paper_scissors("C Z\nB X\nA Z"), 16);
     }
 }
