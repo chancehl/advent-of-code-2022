@@ -1,13 +1,16 @@
 mod day_one;
+mod day_two;
 
 use std::fs;
 
-use day_one::calorie_counting;
+// use day_one::problem::calorie_counting;
+// use day_two::problem::part_one::rock_paper_scissors;
+use day_two::problem::part_two::rock_paper_scissors;
 
 fn main() {
-    let input = fs::read_to_string("./src/day_one/input.txt").unwrap();
+    let input = fs::read_to_string("./src/day_two/input.txt").unwrap();
 
-    let max = calorie_counting(&input);
+    let score = rock_paper_scissors(&input);
 
-    println!("max = {:?}", max);
+    println!("score = {:?}", score);
 }
