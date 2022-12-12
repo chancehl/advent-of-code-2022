@@ -28,7 +28,3 @@ test day_two::tests::part_two_rock_paper_scissors_test ... ok
 test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 ```
-
-## Demo
-
-![demo](./demo.png)
