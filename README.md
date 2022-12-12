@@ -9,10 +9,8 @@ Advent of Code is an Advent calendar of small programming puzzles for a variety 
 ## Test output
 
 ```
-    Finished test [unoptimized + debuginfo] target(s) in 0.00s
-     Running unittests src/main.rs (target/debug/deps/advent_of_code_2022-df48c15572fd18ee)
-
 running 13 tests
+
 test day_one::tests::calculates_max ... ok
 test day_one::tests::calculates_positive_numbers ... ok
 test day_three::tests::calculate_priority_test ... ok
@@ -20,14 +18,15 @@ test day_three::tests::part_one_find_common_item_test ... ok
 test day_three::tests::part_one_rucksack_organization_test ... ok
 test day_three::tests::part_two_find_common_item_test ... ok
 test day_two::tests::calculate_outcome_score_test ... ok
-test day_three::tests::part_two_rucksack_organization_test ... ok
-test day_two::tests::calculate_pick_score_test ... ok
 test day_two::tests::choice_from_str ... ok
 test day_two::tests::outcome_from_str ... ok
-test day_two::tests::part_one_test ... ok
-test day_two::tests::part_two_test ... ok
+test day_two::tests::calculate_pick_score_test ... ok
+test day_two::tests::part_one_rock_paper_scissors_test ... ok
+test day_three::tests::part_two_rucksack_organization_test ... ok
+test day_two::tests::part_two_rock_paper_scissors_test ... ok
 
 test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
 ```
 
 ## Demo
