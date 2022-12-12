@@ -1,6 +1,35 @@
+#[allow(dead_code)]
 pub mod problem {
+    use std::ops::RangeInclusive;
+
+    /// Converts a new line separated range into inclusive range objects
+    /// example: 1-3,5-6\n4-5,1-2 -> [(1..=3, 5..=6), (4..=5, 1..=2)]
+    pub fn parse_section_ranges(input: &str) -> Vec<(RangeInclusive<u32>, RangeInclusive<u32>)> {
+        input
+            .split("\n")
+            .map(|l| l.split(",").collect::<Vec<&str>>())
+            .map(|group| {
+                (
+                    convert_section_assignment_to_range(group[0]),
+                    convert_section_assignment_to_range(group[1]),
+                )
+            })
+            .collect::<Vec<_>>()
+    }
+
+    /// Converts an elf section assignment to an inclusive range
+    /// example: 1-3 -> 1..=3
+    pub fn convert_section_assignment_to_range(input: &str) -> RangeInclusive<u32> {
+        let elements = input
+            .split("-")
+            .map(|e| e.parse().expect("Could not parse u32 from element"))
+            .collect::<Vec<u32>>();
+
+        elements[0]..=elements[1]
+    }
+
     pub mod part_one {
-        use std::ops::RangeInclusive;
+        use super::parse_section_ranges;
 
         /// Elves have been assigned sections (represented by inclusive ranges e.g. 1..5) to clean up
         /// but before cleaning they have discovered that a bunch of the work has been duplicated
@@ -22,41 +51,38 @@ pub mod problem {
 
             overlapping_ranges
         }
+    }
 
-        /// Converts a new line separated range into inclusive range objects
-        /// example: 1-3,5-6\n4-5,1-2 -> [(1..=3, 5..=6), (4..=5, 1..=2)]
-        pub fn parse_section_ranges(
-            input: &str,
-        ) -> Vec<(RangeInclusive<u32>, RangeInclusive<u32>)> {
-            input
-                .split("\n")
-                .map(|l| l.split(",").collect::<Vec<&str>>())
-                .map(|group| {
-                    (
-                        convert_section_assignment_to_range(group[0]),
-                        convert_section_assignment_to_range(group[1]),
-                    )
-                })
-                .collect::<Vec<_>>()
-        }
+    pub mod part_two {
+        use super::parse_section_ranges;
 
-        /// Converts an elf section assignment to an inclusive range
-        /// example: 1-3 -> 1..=3
-        pub fn convert_section_assignment_to_range(input: &str) -> RangeInclusive<u32> {
-            let elements = input
-                .split("-")
-                .map(|e| e.parse().expect("Could not parse u32 from element"))
-                .collect::<Vec<u32>>();
+        /// Elves have been assigned sections (represented by inclusive ranges e.g. 1..5) to clean up
+        /// but before cleaning they have discovered that a bunch of the work has been duplicated
+        /// this function determines how many elves have their sections partially covered by another elf
+        pub fn camp_cleanup(input: &str) -> u32 {
+            let mut overlapping_ranges: u32 = 0;
 
-            elements[0]..=elements[1]
+            let section_ranges = parse_section_ranges(input);
+
+            for (section_a, section_b) in section_ranges {
+                if section_a.contains(&section_b.start()) || section_a.contains(&section_b.end()) {
+                    overlapping_ranges = overlapping_ranges + 1;
+                } else if section_b.contains(&section_a.start())
+                    || section_b.contains(&section_a.end())
+                {
+                    overlapping_ranges = overlapping_ranges + 1;
+                }
+            }
+
+            overlapping_ranges
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::problem::part_one::{
-        camp_cleanup, convert_section_assignment_to_range, parse_section_ranges,
+    use super::problem::{
+        convert_section_assignment_to_range, parse_section_ranges, part_one, part_two,
     };
 
     #[test]
@@ -82,8 +108,15 @@ mod tests {
 
     #[test]
     pub fn part_one_camp_cleanup_test() {
-        assert_eq!(camp_cleanup("1-2,3-4"), 0);
-        assert_eq!(camp_cleanup("1-2,1-1"), 1);
-        assert_eq!(camp_cleanup("1-2,1-1\n3-4,4-6\n7-9,7-8"), 2);
+        assert_eq!(part_one::camp_cleanup("1-2,3-4"), 0);
+        assert_eq!(part_one::camp_cleanup("1-2,1-1"), 1);
+        assert_eq!(part_one::camp_cleanup("1-2,1-1\n3-4,4-6\n7-9,7-8"), 2);
+    }
+
+    #[test]
+    pub fn part_two_camp_cleanup_test() {
+        assert_eq!(part_one::camp_cleanup("1-2,3-4"), 0);
+        assert_eq!(part_one::camp_cleanup("1-2,1-1"), 1);
+        assert_eq!(part_one::camp_cleanup("1-2,1-3\n3-10,4-12\n7-9,7-12"), 2);
     }
 }
