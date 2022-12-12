@@ -55,7 +55,9 @@ pub mod problem {
 
 #[cfg(test)]
 mod tests {
-    use super::problem::part_one::{convert_section_assignment_to_range, parse_section_ranges};
+    use super::problem::part_one::{
+        camp_cleanup, convert_section_assignment_to_range, parse_section_ranges,
+    };
 
     #[test]
     pub fn convert_section_assignment_to_range_test() {
@@ -76,5 +78,12 @@ mod tests {
             parse_section_ranges("1-2,3-4\n5-6,7-8\n9-10,11-12"),
             vec![(1..=2, 3..=4), (5..=6, 7..=8), (9..=10, 11..=12)]
         );
+    }
+
+    #[test]
+    pub fn part_one_camp_cleanup_test() {
+        assert_eq!(camp_cleanup("1-2,3-4"), 0);
+        assert_eq!(camp_cleanup("1-2,1-1"), 1);
+        assert_eq!(camp_cleanup("1-2,1-1\n3-4,4-6\n7-9,7-8"), 2);
     }
 }
