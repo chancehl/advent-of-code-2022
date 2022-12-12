@@ -4,6 +4,36 @@
 
 > Advent of Code is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like. People use them as interview prep, company training, university coursework, practice problems, a speed contest, or to challenge each other. [from https://adventofcode.com/2022/about]
 
+## Progress
+
+| Date       | Status      |
+| ---------- | ----------- |
+| 12/01/2022 | Complete    |
+| 12/02/2022 | Complete    |
+| 12/03/2022 | Complete    |
+| 12/04/2022 | Not started |
+| 12/05/2022 | Not started |
+| 12/06/2022 | Not started |
+| 12/07/2022 | Not started |
+| 12/08/2022 | Not started |
+| 12/09/2022 | Not started |
+| 12/10/2022 | Not started |
+| 12/11/2022 | Not started |
+| 12/12/2022 | Not started |
+| 12/13/2022 | Not started |
+| 12/14/2022 | Not started |
+| 12/15/2022 | Not started |
+| 12/16/2022 | Not started |
+| 12/17/2022 | Not started |
+| 12/18/2022 | Not started |
+| 12/19/2022 | Not started |
+| 12/20/2022 | Not started |
+| 12/21/2022 | Not started |
+| 12/22/2022 | Not started |
+| 12/23/2022 | Not started |
+| 12/24/2022 | Not started |
+| 🎅         | Not started |
+
 ## Test output
 
 ```
