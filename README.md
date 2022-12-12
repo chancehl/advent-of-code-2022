@@ -11,7 +11,7 @@
 | 12/01/2022 | Complete    |
 | 12/02/2022 | Complete    |
 | 12/03/2022 | Complete    |
-| 12/04/2022 | Not started |
+| 12/04/2022 | Complete    |
 | 12/05/2022 | Not started |
 | 12/06/2022 | Not started |
 | 12/07/2022 | Not started |
