@@ -115,8 +115,8 @@ mod tests {
 
     #[test]
     pub fn part_two_camp_cleanup_test() {
-        assert_eq!(part_one::camp_cleanup("1-2,3-4"), 0);
-        assert_eq!(part_one::camp_cleanup("1-2,1-1"), 1);
-        assert_eq!(part_one::camp_cleanup("1-2,1-3\n3-10,4-12\n7-9,7-12"), 2);
+        assert_eq!(part_two::camp_cleanup("1-2,3-4"), 0);
+        assert_eq!(part_two::camp_cleanup("1-2,1-1"), 1);
+        assert_eq!(part_two::camp_cleanup("1-2,1-3\n3-10,4-12\n7-9,7-12"), 3);
     }
 }
