@@ -15,7 +15,8 @@ use std::fs;
 // use day_three::problem::part_two::rucksack_reorganization;
 // use day_four::problem::part_one::camp_cleanup;
 // use day_four::problem::part_two::camp_cleanup;
-use day_five::problem::part_one::supply_stacks;
+// use day_five::problem::part_one::supply_stacks;
+use day_five::problem::part_two::supply_stacks;
 
 fn main() {
     let input = fs::read_to_string("./src/day_five/input.txt").unwrap();

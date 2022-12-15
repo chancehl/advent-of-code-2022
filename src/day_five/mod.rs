@@ -1,9 +1,12 @@
+#[allow(dead_code)]
 pub mod problem {
-    #[derive(Debug)]
+    use regex::Regex;
+
+    #[derive(Debug, PartialEq)]
     pub struct Instruction {
-        count: u8,
-        destination: u8,
-        origin: u8,
+        pub count: u8,
+        pub destination: u8,
+        pub origin: u8,
     }
 
     #[derive(Debug)]
@@ -29,14 +32,45 @@ pub mod problem {
         }
     }
 
-    pub mod part_one {
-        use regex::Regex;
+    /// Parses a vector of instructions from a new line separated list
+    /// example: "move 1 from 5 to 6\nmove 2 from 1 to 4" -> [Instruction {...}, Instruction {...}]
+    pub fn parse_instructions(input: &str) -> Vec<Instruction> {
+        input
+            .split("\n")
+            .map(|l| convert_str_to_instruction(l))
+            .collect::<Vec<Instruction>>()
+    }
 
-        use super::{Instruction, Stack};
+    /// Converts an elf's instructions to a struct
+    pub fn convert_str_to_instruction(str: &str) -> Instruction {
+        let re = Regex::new("\\d+").unwrap();
+
+        let mut matches = re.find_iter(str);
+
+        // This is the same as a 3x left shift on the matches iter.
+        // TODO: convert to shift for terseness
+        let count = matches.nth(0).unwrap().as_str().parse::<u8>().unwrap();
+        let origin = matches.nth(0).unwrap().as_str().parse::<u8>().unwrap();
+        let destination = matches.nth(0).unwrap().as_str().parse::<u8>().unwrap();
+
+        Instruction {
+            count,
+            destination,
+            origin,
+        }
+    }
+
+    /// Parses an input into stack structs
+    pub fn parse_shipping_containers(input: &str) -> Vec<Vec<char>> {
+        input.split("\n").map(|s| s.chars().collect()).collect()
+    }
+
+    pub mod part_one {
+        use super::{parse_instructions, parse_shipping_containers, Stack};
 
         /// Calculates the top of each stack after an intial set of stacks has been shuffled around by some elves as per the instructions left by santa
         pub fn supply_stacks(instructions: &str, stacks: &str) -> String {
-            let mut stacks = parse_stacks(stacks)
+            let mut shipping_containers = parse_shipping_containers(stacks)
                 .iter()
                 .map(|s| Stack::new(s.to_vec()))
                 .collect::<Vec<Stack>>();
@@ -48,53 +82,111 @@ pub mod problem {
                 let mut elements: Vec<char> = Vec::new();
 
                 while operations < instruction.count {
-                    elements.push(stacks[usize::from(instruction.origin - 1)].pop());
+                    elements.push(shipping_containers[usize::from(instruction.origin - 1)].pop());
 
                     operations = operations + 1;
                 }
 
                 for element in elements {
-                    stacks[usize::from(instruction.destination - 1)].push(element)
+                    shipping_containers[usize::from(instruction.destination - 1)].push(element)
                 }
             }
 
-            stacks
+            shipping_containers
                 .iter()
                 .map(|s| s.peek().to_string())
                 .collect::<Vec<String>>()
                 .join("")
         }
+    }
 
-        pub fn parse_stacks(input: &str) -> Vec<Vec<char>> {
-            input.split("\n").map(|s| s.chars().collect()).collect()
-        }
+    pub mod part_two {
+        use super::{parse_instructions, parse_shipping_containers, Stack};
 
-        /// Parses a vector of instructions from a new line separated list
-        /// example: "move 1 from 5 to 6\nmove 2 from 1 to 4" -> [Instruction {...}, Instruction {...}]
-        pub fn parse_instructions(input: &str) -> Vec<Instruction> {
-            input
-                .split("\n")
-                .map(|l| convert_str_to_instruction(l))
-                .collect::<Vec<Instruction>>()
-        }
+        /// Calculates the top of each stack after an intial set of stacks has been shuffled around by some elves as per the instructions left by santa
+        pub fn supply_stacks(instructions: &str, containers: &str) -> String {
+            let mut shipping_containers = parse_shipping_containers(containers)
+                .iter()
+                .map(|s| Stack::new(s.to_vec()))
+                .collect::<Vec<Stack>>();
 
-        /// Converts an elf's instructions to a struct
-        pub fn convert_str_to_instruction(str: &str) -> Instruction {
-            let re = Regex::new("\\d+").unwrap();
+            let instructions = parse_instructions(instructions);
 
-            let mut matches = re.find_iter(str);
+            for instruction in instructions {
+                let mut operations = 0;
+                let mut elements: Vec<char> = Vec::new();
 
-            // This is the same as a 3x left shift on the matches iter.
-            // TODO: convert to shift for terseness
-            let count = matches.nth(0).unwrap().as_str().parse::<u8>().unwrap();
-            let origin = matches.nth(0).unwrap().as_str().parse::<u8>().unwrap();
-            let destination = matches.nth(0).unwrap().as_str().parse::<u8>().unwrap();
+                while operations < instruction.count {
+                    elements.push(shipping_containers[usize::from(instruction.origin - 1)].pop());
 
-            Instruction {
-                count,
-                destination,
-                origin,
+                    operations = operations + 1;
+                }
+
+                // Reverse the elements because now we can select multiple at once and they come out in LIFO order
+                // but need to be reapplied in reverse
+                elements.reverse();
+
+                for element in elements {
+                    shipping_containers[usize::from(instruction.destination - 1)].push(element)
+                }
             }
+
+            shipping_containers
+                .iter()
+                .map(|s| s.peek().to_string())
+                .collect::<Vec<String>>()
+                .join("")
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::problem::{convert_str_to_instruction, part_one, part_two, Instruction};
+
+    #[test]
+    pub fn convert_str_to_instruction_test() {
+        assert_eq!(
+            convert_str_to_instruction("move 1 from 5 to 3"),
+            Instruction {
+                count: 1,
+                destination: 3,
+                origin: 5
+            }
+        );
+        assert_eq!(
+            convert_str_to_instruction("move 2 from 3 to 1"),
+            Instruction {
+                count: 2,
+                destination: 1,
+                origin: 3
+            }
+        );
+        assert_eq!(
+            convert_str_to_instruction("move 10 from 5 to 20"),
+            Instruction {
+                count: 10,
+                destination: 20,
+                origin: 5
+            }
+        );
+    }
+
+    #[test]
+    pub fn part_one_supply_stacks_test() {
+        // TODO: write more of these to validate
+        assert_eq!(
+            part_one::supply_stacks("move 1 from 2 to 1\nmove 1 from 3 to 2", "AAA\nBBB\nCCC"),
+            "BCC"
+        );
+    }
+
+    #[test]
+    pub fn part_two_supply_stacks_test() {
+        // TODO: write more of these to validate
+        assert_eq!(
+            part_two::supply_stacks("move 2 from 2 to 1\nmove 1 from 3 to 2", "ABC\nHIJ\nXYZ"),
+            "JZY"
+        );
     }
 }
