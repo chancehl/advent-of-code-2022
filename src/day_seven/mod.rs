@@ -1,10 +1,8 @@
 pub mod problem {
     use std::str::FromStr;
 
-    use regex::Regex;
-
     #[derive(Debug)]
-    struct ElfDirectory {
+    pub struct ElfDirectory {
         name: String,
         children: Vec<ElfDirectory>,
         files: Vec<ElfFile>,
@@ -28,10 +26,9 @@ pub mod problem {
         fn from_str(s: &str) -> Result<Self, Self::Err> {
             let mut parts = s.split(" ");
 
-            let command = &parts.nth(1);
-            let arg = &parts.nth(1);
-
-            println!("command = {:?}, arg = {:?}", command, arg);
+            let _prefix = &parts.nth(0);
+            let command = &parts.nth(0);
+            let arg = &parts.nth(0);
 
             Ok(ElfTerminalCommand {
                 arg: arg.map(|s| s.to_owned()),
@@ -51,20 +48,33 @@ pub mod problem {
     }
 
     pub mod part_one {
-        use super::ElfDirectory;
+        use std::str::FromStr;
+
+        use regex::Regex;
+
+        use super::ElfTerminalCommand;
 
         pub fn no_space_on_device(input: &str) -> u32 {
-            let tree = convert_input_to_directory_tree(input);
+            let file_regex = Regex::new("\\d+\\s+[a-zA-Z]+").unwrap();
+            let dir_regex = Regex::new("dir\\s+[a-zA-Z]+").unwrap();
+
+            let raw_commands = input.split("\n").collect::<Vec<&str>>();
+
+            // grab navigation commands to build tree
+            let navigation_commands = raw_commands
+                .iter()
+                .filter(|l| !file_regex.is_match(l) && !dir_regex.is_match(l))
+                .map(|l| ElfTerminalCommand::from_str(l).unwrap())
+                .collect::<Vec<ElfTerminalCommand>>();
+
+            for index in 0..navigation_commands.len() {
+                println!(
+                    "navigation command {:?} => {:?}",
+                    index, navigation_commands[index]
+                )
+            }
 
             todo!();
-        }
-
-        pub fn convert_input_to_directory_tree(input: &str) -> u32 {
-            let root = ElfDirectory::new("/".to_owned());
-
-            println!("root = {:?}", root);
-
-            todo!()
         }
     }
 }
@@ -78,11 +88,19 @@ mod tests {
     #[test]
     fn elf_terminal_command_from_str_test() {
         assert_eq!(
-            ElfTerminalCommand::from_str("$ cd sss").unwrap(),
+            ElfTerminalCommand::from_str("$ cd dir").unwrap(),
             ElfTerminalCommand {
-                arg: Some("/".to_owned()),
+                arg: Some("dir".to_owned()),
                 command: "cd".to_owned()
             }
-        )
+        );
+
+        assert_eq!(
+            ElfTerminalCommand::from_str("$ ls").unwrap(),
+            ElfTerminalCommand {
+                arg: None,
+                command: "ls".to_owned()
+            }
+        );
     }
 }
