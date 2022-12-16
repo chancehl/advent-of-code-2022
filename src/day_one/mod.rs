@@ -53,11 +53,6 @@ pub mod problem {
 
             calories_consumed.sort();
 
-            println!(
-                "top 3 = {:?}",
-                &calories_consumed[calories_consumed.len() - 3..]
-            );
-
             calories_consumed[calories_consumed.len() - 3..]
                 .iter()
                 .sum()
