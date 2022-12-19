@@ -7,6 +7,8 @@ mod day_six;
 mod day_three;
 mod day_two;
 
+mod shared;
+
 use std::fs;
 
 // use day_one::problem::part_one::calorie_counting;

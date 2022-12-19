@@ -1,5 +1,5 @@
 pub mod problem {
-    use std::str::FromStr;
+    use crate::shared::Stack;
 
     #[derive(Debug)]
     pub struct ElfDirectory {
@@ -14,26 +14,9 @@ pub mod problem {
         size: u32,
     }
 
-    #[derive(Debug, PartialEq)]
-    pub struct ElfTerminalCommand {
-        pub command: String,
-        pub arg: Option<String>, // all elf terminal commands only have a single argument
-    }
-
-    impl FromStr for ElfTerminalCommand {
-        type Err = ();
-
-        fn from_str(s: &str) -> Result<Self, Self::Err> {
-            let mut parts = s.split(" ");
-
-            let _prefix = &parts.nth(0);
-            let command = &parts.nth(0);
-            let arg = &parts.nth(0);
-
-            Ok(ElfTerminalCommand {
-                arg: arg.map(|s| s.to_owned()),
-                command: command.expect("Could not locate command").to_owned(),
-            })
+    impl ElfFile {
+        pub fn new(name: String, size: u32) -> Self {
+            ElfFile { name, size }
         }
     }
 
@@ -48,59 +31,99 @@ pub mod problem {
     }
 
     pub mod part_one {
-        use std::str::FromStr;
-
         use regex::Regex;
 
-        use super::ElfTerminalCommand;
+        use super::{ElfDirectory, ElfFile};
 
         pub fn no_space_on_device(input: &str) -> u32 {
-            let file_regex = Regex::new("\\d+\\s+[a-zA-Z]+").unwrap();
-            let dir_regex = Regex::new("dir\\s+[a-zA-Z]+").unwrap();
+            let terminal_output = input.split("\n").collect::<Vec<&str>>();
 
-            let raw_commands = input.split("\n").collect::<Vec<&str>>();
+            let mut pointer_a = 0;
+            let mut pointer_b = pointer_a + 1;
 
-            // grab navigation commands to build tree
-            let navigation_commands = raw_commands
-                .iter()
-                .filter(|l| !file_regex.is_match(l) && !dir_regex.is_match(l))
-                .map(|l| ElfTerminalCommand::from_str(l).unwrap())
-                .collect::<Vec<ElfTerminalCommand>>();
+            let mut current_directory: Option<&str> = None;
+            let mut previous_directory: Option<&str> = None;
 
-            for index in 0..navigation_commands.len() {
-                println!(
-                    "navigation command {:?} => {:?}",
-                    index, navigation_commands[index]
-                )
+            while pointer_a < terminal_output.len() {
+                while !is_cd_command(terminal_output[pointer_b]) {
+                    pointer_b = pointer_b + 1;
+                }
+
+                let input = terminal_output[pointer_a..pointer_b]
+                    .iter()
+                    .map(|&s| s.to_owned())
+                    .collect::<Vec<String>>();
+
+                let directory = create_directory_from_input(input);
+
+                println!("{:?}", directory);
+
+                pointer_a = pointer_b;
+                pointer_b = pointer_a + 1;
             }
 
             todo!();
         }
-    }
-}
 
-#[cfg(test)]
-mod tests {
-    use std::str::FromStr;
+        pub fn create_directory_from_input(terminal_output: Vec<String>) -> ElfDirectory {
+            let dir_name = terminal_output[0]
+                .split(" ")
+                .nth(2)
+                .expect("Could not parse directory name from terminal output");
 
-    use super::problem::ElfTerminalCommand;
+            let mut root = ElfDirectory::new(dir_name.to_owned());
 
-    #[test]
-    fn elf_terminal_command_from_str_test() {
-        assert_eq!(
-            ElfTerminalCommand::from_str("$ cd dir").unwrap(),
-            ElfTerminalCommand {
-                arg: Some("dir".to_owned()),
-                command: "cd".to_owned()
+            for i in 1..terminal_output.len() {
+                let terminal_line = &terminal_output[i];
+
+                if is_list_command(terminal_line.as_ref()) {
+                    // if it's a list command just skip (we do nothing with this)
+                    continue;
+                } else if is_file(terminal_line.as_ref()) {
+                    // if it's a file add it to the current node's files array
+                    let size = terminal_line
+                        .split(" ")
+                        .nth(0)
+                        .unwrap()
+                        .parse::<u32>()
+                        .expect("Could not parse u32 from terminal line");
+
+                    let name = terminal_line.split(" ").nth(1).unwrap().to_owned();
+
+                    let new_file = ElfFile::new(name, size);
+
+                    let files = &mut root.files;
+
+                    files.push(new_file);
+                } else if is_directory(terminal_line.as_ref()) {
+                    // if it's a directory add it to the current node's directories arary
+                    let name = terminal_line.split(" ").nth(1).unwrap().to_owned();
+
+                    let new_directory = ElfDirectory::new(name);
+
+                    let directories = &mut root.children;
+
+                    directories.push(new_directory);
+                }
             }
-        );
 
-        assert_eq!(
-            ElfTerminalCommand::from_str("$ ls").unwrap(),
-            ElfTerminalCommand {
-                arg: None,
-                command: "ls".to_owned()
-            }
-        );
+            root
+        }
+
+        pub fn is_cd_command(input: &str) -> bool {
+            Regex::new("\\$\\scd\\s.+").unwrap().is_match(input)
+        }
+
+        pub fn is_list_command(input: &str) -> bool {
+            Regex::new("\\$\\sls").unwrap().is_match(input)
+        }
+
+        pub fn is_file(input: &str) -> bool {
+            Regex::new("\\d+\\s[a-zA-Z]+").unwrap().is_match(input)
+        }
+
+        pub fn is_directory(input: &str) -> bool {
+            Regex::new("dir\\s[a-zA-Z]+").unwrap().is_match(input)
+        }
     }
 }
