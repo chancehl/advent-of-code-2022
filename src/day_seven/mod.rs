@@ -1,6 +1,5 @@
+#[allow(dead_code)]
 pub mod problem {
-    use crate::shared::Stack;
-
     #[derive(Debug)]
     pub struct ElfDirectory {
         name: String,
