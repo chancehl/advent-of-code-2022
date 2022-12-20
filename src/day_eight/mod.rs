@@ -1,30 +1,52 @@
 pub mod problem {
     use std::str::FromStr;
 
-    pub struct Graph<T> {
-        pub elements: Vec<Vec<T>>,
+    pub struct ElfTreeGraph<T> {
+        pub trees: Vec<Vec<T>>,
     }
 
-    impl Graph<u32> {
-        pub fn get_adjacent_nodes(row: usize, col: usize) -> Vec<u32> {
+    type DirectionalVisibility = (bool, bool, bool, bool);
+
+    type AdjacentNodes = (Vec<u32>, Vec<u32>, Vec<u32>, Vec<u32>);
+
+    impl ElfTreeGraph<u32> {
+        pub fn new(elements: Vec<Vec<u32>>) -> Self {
+            ElfTreeGraph { trees: elements }
+        }
+
+        pub fn get_adjacent_trees(&self, row: usize, col: usize) -> AdjacentNodes {
             todo!()
         }
 
-        pub fn count_edges(&self) -> u32 {
-            let rows = self.elements.len();
-            let cols = self.elements[0].len();
+        pub fn count_edges(&self) -> usize {
+            let mut count = 0;
 
-            todo!()
+            let rows = self.trees.len();
+            let cols = self.trees[0].len();
+
+            for _ in 1..rows - 1 {
+                for _ in 1..cols - 1 {
+                    count = count + 1;
+                }
+            }
+
+            (rows * cols) - count
+        }
+
+        pub fn is_tree_visible(&self, row: usize, col: usize) -> DirectionalVisibility {
+            let tree = self.trees[row][col];
+            let adjacent_nodes = self.get_adjacent_trees(row, col);
+
+            (false, false, false, false)
         }
     }
 
-    impl FromStr for Graph<u32> {
+    impl FromStr for ElfTreeGraph<u32> {
         type Err = ();
 
         fn from_str(s: &str) -> Result<Self, Self::Err> {
-            Ok(Graph {
-                elements: s
-                    .split("\n")
+            Ok(ElfTreeGraph::new(
+                s.split("\n")
                     .map(|row| {
                         row.chars()
                             .map(|c| {
@@ -35,28 +57,40 @@ pub mod problem {
                             .collect::<Vec<u32>>()
                     })
                     .collect::<Vec<Vec<u32>>>(),
-            })
+            ))
         }
     }
 
     pub mod part_one {
         use std::str::FromStr;
 
-        use super::Graph;
+        use super::ElfTreeGraph;
 
-        pub fn treetop_tree_house(input: &str) -> u32 {
-            let graph = Graph::from_str(input).expect("Could not convert input to Graph type");
+        pub fn treetop_tree_house(input: &str) -> usize {
+            let graph =
+                ElfTreeGraph::from_str(input).expect("Could not convert input to Graph type");
 
-            let rows = graph.elements.len();
-            let cols = graph.elements[0].len();
+            let rows = graph.trees.len();
+            let cols = graph.trees[0].len();
 
-            for i in 0..rows {
-                for j in 0..cols {
-                    println!("graph[i][j] = {:?}", graph.elements[i][j]);
+            let mut visible_trees = 0;
+
+            // every edge counts because there's nothing blocking the view
+            let edges = graph.count_edges();
+
+            println!("edges = {:?}", edges);
+
+            for i in 1..rows - 1 {
+                for j in 1..cols - 1 {
+                    println!("graph[i][j] = {:?}", graph.trees[i][j]);
+
+                    let visibility = graph.is_tree_visible(i, j);
+
+                    println!("visibility = {:?}", visibility);
                 }
             }
 
-            todo!()
+            edges + visible_trees
         }
     }
 }
