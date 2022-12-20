@@ -40,9 +40,6 @@ pub mod problem {
             let mut pointer_a = 0;
             let mut pointer_b = pointer_a + 1;
 
-            let mut current_directory: Option<&str> = None;
-            let mut previous_directory: Option<&str> = None;
-
             while pointer_a < terminal_output.len() {
                 while !is_cd_command(terminal_output[pointer_b]) {
                     pointer_b = pointer_b + 1;

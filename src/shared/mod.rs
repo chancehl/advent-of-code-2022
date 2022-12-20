@@ -3,6 +3,7 @@ pub struct Stack<T> {
     elements: Vec<T>,
 }
 
+#[allow(dead_code)]
 impl<T> Stack<T> {
     pub fn new(elements: Vec<T>) -> Self {
         Stack { elements }
