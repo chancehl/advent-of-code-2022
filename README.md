@@ -15,7 +15,7 @@
 | 12/05/2022 | Complete    |
 | 12/06/2022 | Complete    |
 | 12/07/2022 | WIP         |
-| 12/08/2022 | Not started |
+| 12/08/2022 | Complete    |
 | 12/09/2022 | Not started |
 | 12/10/2022 | Not started |
 | 12/11/2022 | Not started |
