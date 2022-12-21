@@ -24,12 +24,13 @@ use std::fs;
 // use day_five::problem::part_two::supply_stacks;
 // use day_six::problem::tuning_trouble; // Note: this one has a shared solution for part one and two
 // use day_seven::problem::part_one::no_space_on_device;
-use day_eight::problem::part_one::treetop_tree_house;
+// use day_eight::problem::part_one::treetop_tree_house;
+use day_eight::problem::part_two::treetop_tree_house;
 
 fn main() {
-    let input = fs::read_to_string("./src/day_eight/input_b.txt").unwrap();
+    let input = fs::read_to_string("./src/day_eight/input.txt").unwrap();
 
-    let visible_trees = treetop_tree_house(&input);
+    let scenic_score = treetop_tree_house(&input);
 
-    println!("visible_trees = {:?}", visible_trees);
+    println!("scenic_score = {:?}", scenic_score);
 }
