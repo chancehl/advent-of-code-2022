@@ -37,31 +37,41 @@
 ## Test output
 
 ```
-running 23 tests
+running 33 tests
 
+test day_eight::tests::elf_tree_graph_count_edges_test ... ok
+test day_eight::tests::elf_tree_graph_get_east_trees_test ... ok
+test day_eight::tests::elf_tree_graph_get_adjacent_trees_test ... ok
+test day_eight::tests::elf_tree_graph_get_north_trees_test ... ok
+test day_eight::tests::elf_tree_graph_get_south_trees_test ... ok
+test day_eight::tests::elf_tree_graph_get_west_trees_test ... ok
+test day_eight::tests::elf_tree_graph_is_tree_visible_test ... ok
+test day_eight::tests::elf_tree_graph_is_visible_from_direction_test ... ok
+test day_eight::tests::elf_tree_graph_part_one_treetop_treehouse_test ... ok
+test day_eight::tests::elf_tree_graph_part_two_treetop_treehouse_test ... ok
 test day_four::tests::convert_section_assignment_to_range_test ... ok
-test day_four::tests::parse_selection_ranges_test ... ok
 test day_four::tests::part_one_camp_cleanup_test ... ok
+test day_four::tests::parse_selection_ranges_test ... ok
 test day_four::tests::part_two_camp_cleanup_test ... ok
 test day_one::tests::calculate_sum_of_meals_test ... ok
 test day_one::tests::part_one_calorie_counting_test ... ok
 test day_one::tests::part_two_calorie_counting_test ... ok
 test day_six::tests::has_duplicate_chars_test ... ok
 test day_three::tests::calculate_priority_test ... ok
-test day_three::tests::part_one_rucksack_organization_test ... ok
 test day_three::tests::part_one_find_common_item_test ... ok
-test day_three::tests::part_two_find_common_item_test ... ok
+test day_three::tests::part_one_rucksack_organization_test ... ok
 test day_two::tests::calculate_outcome_score_test ... ok
-test day_six::tests::tuning_trouble_test ... ok
+test day_three::tests::part_two_find_common_item_test ... ok
+test day_three::tests::part_two_rucksack_organization_test ... ok
 test day_two::tests::calculate_pick_score_test ... ok
+test day_six::tests::tuning_trouble_test ... ok
 test day_two::tests::choice_from_str ... ok
 test day_two::tests::outcome_from_str ... ok
-test day_three::tests::part_two_rucksack_organization_test ... ok
 test day_two::tests::part_one_rock_paper_scissors_test ... ok
 test day_two::tests::part_two_rock_paper_scissors_test ... ok
-test day_five::tests::part_two_supply_stacks_test ... ok
 test day_five::tests::part_one_supply_stacks_test ... ok
+test day_five::tests::part_two_supply_stacks_test ... ok
 test day_five::tests::convert_str_to_instruction_test ... ok
 
-test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```

@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub mod problem {
     use std::str::FromStr;
 
@@ -242,5 +243,142 @@ pub mod problem {
                 .expect("Could not find max for scenic_score vec")
                 .to_owned()
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::{fs, str::FromStr};
+
+    use super::problem::{part_one, part_two, ElfTreeGraph};
+
+    pub fn get_test_graph() -> ElfTreeGraph<u32> {
+        ElfTreeGraph::from_str(&fs::read_to_string("./src/day_eight/input_b.txt").unwrap())
+            .expect("Could not convert input to test graph")
+    }
+
+    #[test]
+    pub fn elf_tree_graph_count_edges_test() {
+        let graph = get_test_graph();
+
+        assert_eq!(graph.count_edges(), 16);
+    }
+
+    #[test]
+    pub fn elf_tree_graph_get_north_trees_test() {
+        let graph = get_test_graph();
+
+        assert_eq!(graph.get_north_trees(2, 2), vec![3, 5]);
+        assert_eq!(graph.get_north_trees(1, 0), vec![3]);
+        assert_eq!(graph.get_north_trees(3, 3), vec![7, 1, 3]);
+    }
+
+    #[test]
+    pub fn elf_tree_graph_get_south_trees_test() {
+        let graph = get_test_graph();
+
+        assert_eq!(graph.get_south_trees(2, 2), vec![5, 3]);
+        assert_eq!(graph.get_south_trees(1, 0), vec![6, 3, 3]);
+        assert_eq!(graph.get_south_trees(3, 3), vec![9]);
+    }
+
+    #[test]
+    pub fn elf_tree_graph_get_east_trees_test() {
+        let graph = get_test_graph();
+
+        assert_eq!(graph.get_east_trees(2, 2), vec![3, 2]);
+        assert_eq!(graph.get_east_trees(1, 0), vec![5, 5, 1, 2]);
+        assert_eq!(graph.get_east_trees(3, 3), vec![9]);
+    }
+
+    #[test]
+    pub fn elf_tree_graph_get_west_trees_test() {
+        let graph = get_test_graph();
+
+        assert_eq!(graph.get_west_trees(2, 2), vec![6, 5]);
+        assert_eq!(graph.get_west_trees(1, 0), vec![]);
+        assert_eq!(graph.get_west_trees(3, 3), vec![3, 3, 5]);
+    }
+
+    #[test]
+    pub fn elf_tree_graph_get_adjacent_trees_test() {
+        let graph = get_test_graph();
+
+        assert_eq!(
+            graph.get_adjacent_trees(2, 2),
+            (vec![3, 5], vec![5, 3], vec![3, 2], vec![6, 5])
+        );
+        assert_eq!(
+            graph.get_adjacent_trees(1, 0),
+            (vec![3], vec![6, 3, 3], vec![5, 5, 1, 2], vec![])
+        );
+        assert_eq!(
+            graph.get_adjacent_trees(3, 3),
+            (vec![7, 1, 3], vec![9], vec![9], vec![3, 3, 5])
+        );
+    }
+
+    #[test]
+    pub fn elf_tree_graph_is_tree_visible_test() {
+        let graph = get_test_graph();
+
+        assert_eq!(graph.is_tree_visible(2, 2), false);
+        assert_eq!(graph.is_tree_visible(1, 0), true);
+        assert_eq!(graph.is_tree_visible(3, 3), false);
+    }
+
+    #[test]
+    pub fn elf_tree_graph_is_visible_from_direction_test() {
+        let graph = get_test_graph();
+
+        let north = graph.get_north_trees(2, 2);
+        let south = graph.get_south_trees(2, 2);
+        let east = graph.get_east_trees(2, 2);
+        let west = graph.get_west_trees(2, 2);
+
+        assert_eq!(graph.is_visible_from_direction(2, 2, north), false);
+        assert_eq!(graph.is_visible_from_direction(2, 2, south), false);
+        assert_eq!(graph.is_visible_from_direction(2, 2, east), false);
+        assert_eq!(graph.is_visible_from_direction(2, 2, west), false);
+
+        let north = graph.get_north_trees(1, 0);
+        let south = graph.get_south_trees(1, 0);
+        let east = graph.get_east_trees(1, 0);
+        let west = graph.get_west_trees(1, 0);
+
+        assert_eq!(graph.is_visible_from_direction(1, 0, north), false);
+        assert_eq!(graph.is_visible_from_direction(1, 0, south), false);
+        assert_eq!(graph.is_visible_from_direction(1, 0, east), false);
+        assert_eq!(graph.is_visible_from_direction(1, 0, west), true);
+
+        let north = graph.get_north_trees(3, 3);
+        let south = graph.get_south_trees(3, 3);
+        let east = graph.get_east_trees(3, 3);
+        let west = graph.get_west_trees(3, 3);
+
+        assert_eq!(graph.is_visible_from_direction(3, 3, north), false);
+        assert_eq!(graph.is_visible_from_direction(3, 3, south), false);
+        assert_eq!(graph.is_visible_from_direction(3, 3, east), false);
+        assert_eq!(graph.is_visible_from_direction(3, 3, west), false);
+    }
+
+    #[test]
+    pub fn elf_tree_graph_part_one_treetop_treehouse_test() {
+        assert_eq!(
+            part_one::treetop_tree_house(
+                &fs::read_to_string("./src/day_eight/input_b.txt").unwrap()
+            ),
+            21
+        );
+    }
+
+    #[test]
+    pub fn elf_tree_graph_part_two_treetop_treehouse_test() {
+        assert_eq!(
+            part_two::treetop_tree_house(
+                &fs::read_to_string("./src/day_eight/input_b.txt").unwrap()
+            ),
+            8
+        );
     }
 }
