@@ -78,15 +78,15 @@ pub mod problem {
     type Coords = (usize, usize);
 
     #[derive(Debug)]
-    pub struct ExpandingGraph {
+    pub struct ExpandingMatrix {
         /// Vec of nodes
         elements: Vec<Vec<Node>>,
         /// This tracks everywhere the tail has been
         tail_posns: Vec<Coords>,
     }
 
-    impl ExpandingGraph {
-        /// Creates a new instance of an expanding graph
+    impl ExpandingMatrix {
+        /// Creates a new instance of an expanding matrix
         pub fn new(starting_posn: Coords) -> Self {
             let (x, y) = starting_posn;
 
@@ -107,13 +107,13 @@ pub mod problem {
                 elements.push(cols);
             }
 
-            ExpandingGraph {
+            ExpandingMatrix {
                 elements,
                 tail_posns: vec![starting_posn],
             }
         }
 
-        /// Adds a row to an ExpandingGraph
+        /// Adds a row to an ExpandingMatrix
         fn add_row(&mut self) -> () {
             let columns = self.elements[0].len();
 
@@ -126,7 +126,7 @@ pub mod problem {
             self.elements.push(new_row)
         }
 
-        /// Adds a column to an expanding graph
+        /// Adds a column to an expanding marix
         fn add_column(&mut self) -> () {
             let mut new_elements: Vec<Vec<Node>> = Vec::new();
 
@@ -186,7 +186,7 @@ pub mod problem {
             while moves_taken < n {
                 let (head_row, head_col) = self
                     .get_posn(Token::Head)
-                    .expect("Could not find head position in graph");
+                    .expect("Could not find head position");
 
                 let (tail_row, tail_col) = self
                     .get_posn(Token::Tail)
@@ -282,8 +282,8 @@ pub mod problem {
         }
     }
 
-    impl ToString for ExpandingGraph {
-        /// Converts an expanding graph to string format
+    impl ToString for ExpandingMatrix {
+        /// Converts an expanding matrix to string format
         fn to_string(&self) -> String {
             let mut output = "".to_owned();
 
@@ -314,20 +314,20 @@ pub mod problem {
     }
 
     pub mod part_one {
-        use super::{convert_input_to_instructions, ExpandingGraph};
+        use super::{convert_input_to_instructions, ExpandingMatrix};
 
         pub fn rope_bridge(input: &str) -> usize {
             let instructions = convert_input_to_instructions(input);
 
-            let mut graph = ExpandingGraph::new((0, 0));
+            let mut matrix = ExpandingMatrix::new((0, 0));
 
             for instruction in instructions {
                 println!("processing instruction = {:?}", instruction);
 
-                graph.move_rope(instruction);
+                matrix.move_rope(instruction);
             }
 
-            graph.tail_posns.len()
+            matrix.tail_posns.len()
         }
     }
 }
