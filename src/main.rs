@@ -2,6 +2,7 @@
 mod day_eight;
 mod day_five;
 mod day_four;
+mod day_nine;
 mod day_one;
 mod day_seven;
 mod day_six;
@@ -25,12 +26,13 @@ use std::fs;
 // use day_six::problem::tuning_trouble; // Note: this one has a shared solution for part one and two
 // use day_seven::problem::part_one::no_space_on_device;
 // use day_eight::problem::part_one::treetop_tree_house;
-use day_eight::problem::part_two::treetop_tree_house;
+// use day_eight::problem::part_two::treetop_tree_house;
+use day_nine::problem::part_one::rope_bridge;
 
 fn main() {
-    let input = fs::read_to_string("./src/day_eight/input.txt").unwrap();
+    let input = fs::read_to_string("./src/day_nine/input_b.txt").unwrap();
 
-    let scenic_score = treetop_tree_house(&input);
+    let positions = rope_bridge(&input);
 
-    println!("scenic_score = {:?}", scenic_score);
+    println!("positions = {:?}", positions);
 }
