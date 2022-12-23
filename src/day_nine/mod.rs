@@ -154,7 +154,7 @@ pub mod problem {
         }
 
         /// Moves the head based off of a given intruction
-        pub fn move_pointer(&mut self, instruction: Instruction) -> () {
+        pub fn move_rope(&mut self, instruction: Instruction) -> () {
             match instruction.direction {
                 Direction::Up => self.move_up(instruction.count.into()),
                 Direction::Down => self.move_down(instruction.count.into()),
@@ -324,7 +324,7 @@ pub mod problem {
             for instruction in instructions {
                 println!("processing instruction = {:?}", instruction);
 
-                graph.move_pointer(instruction);
+                graph.move_rope(instruction);
             }
 
             graph.tail_posns.len()
