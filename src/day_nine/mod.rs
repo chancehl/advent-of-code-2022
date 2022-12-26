@@ -165,7 +165,36 @@ pub mod problem {
 
         /// Moves the head (and tail if applicable) up n spaces
         fn move_up(&mut self, n: usize) -> () {
-            todo!()
+            // Do the moves one at a time
+            let mut moves_taken = 0;
+
+            while moves_taken < n {
+                let (head_row, head_col) = self
+                    .get_posn(Token::Head)
+                    .expect("Could not find head position");
+
+                let (tail_row, tail_col) = self
+                    .get_posn(Token::Tail)
+                    .expect("Could not locate tail posn");
+
+                if head_row + 1 <= n {
+                    self.grow(1);
+                }
+
+                // Move the head one to the right
+                self.update_posn(Token::Head, (head_row - 1, head_col));
+
+                let is_tail_adjancent = self.is_tail_adjacent_to_head();
+
+                if !is_tail_adjancent {
+                    self.update_posn(Token::Tail, (tail_row - 1, tail_col));
+                }
+
+                moves_taken = moves_taken + 1;
+
+                println!("Move {:?}", moves_taken);
+                println!("{}", self.to_string());
+            }
         }
 
         /// Moves the head (and tail if applicable) down n spaces
@@ -277,6 +306,11 @@ pub mod problem {
         fn is_tail_adjacent_to_head(&self) -> bool {
             let (head_row, head_col) = self.get_posn(Token::Head).expect("Could not locate head");
             let (tail_row, tail_col) = self.get_posn(Token::Tail).expect("Could not locate tail");
+
+            println!("{}", self.to_string());
+
+            println!("head_row = {:?}, head_col = {:?}", head_row, head_col);
+            println!("tail_row = {:?}, tail_col = {:?}", tail_row, tail_col);
 
             (head_row - tail_row) <= 1 && (head_col - tail_col) <= 1
         }
