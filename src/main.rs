@@ -6,6 +6,7 @@ mod day_nine;
 mod day_one;
 mod day_seven;
 mod day_six;
+mod day_ten;
 mod day_three;
 mod day_two;
 
@@ -27,12 +28,13 @@ use std::fs;
 // use day_seven::problem::part_one::no_space_on_device;
 // use day_eight::problem::part_one::treetop_tree_house;
 // use day_eight::problem::part_two::treetop_tree_house;
-use day_nine::problem::part_one::rope_bridge;
+// use day_nine::problem::part_one::rope_bridge;
+use day_ten::problem::part_one::cathode_ray_tube;
 
 fn main() {
-    let input = fs::read_to_string("./src/day_nine/input_b.txt").unwrap();
+    let input = fs::read_to_string("./src/day_ten/input.txt").unwrap();
 
-    let positions = rope_bridge(&input);
+    let signal_strength = cathode_ray_tube(&input);
 
-    println!("positions = {:?}", positions);
+    println!("signal_strength = {:?}", signal_strength);
 }
